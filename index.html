@@ -4,7 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lixo Zero MB</title>
-<link rel="stylesheet" href="style.css">
+<style>
+:root{
+  --green-950:#073d22; --green-900:#0b512d; --green-800:#0f6538; --green-700:#168447;
+  --green-600:#22a45a; --green-500:#39b86b; --green-300:#a9e8c0; --green-100:#eaf8ef;
+  --ink:#173126; --muted:#6d7f75; --white:#fff; --danger:#d53d3d; --warn:#e79a18;
+  --shadow:0 18px 44px rgba(8,63,36,.16); --radius:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#edf5f0;color:var(--ink)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:linear-gradient(180deg,var(--green-950),var(--green-800));color:white;padding:22px 16px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:12px;padding:8px 10px 24px}
+.logo{width:48px;height:48px;border-radius:14px;background:white;color:var(--green-800);display:grid;place-items:center;font-size:27px;box-shadow:0 8px 18px rgba(0,0,0,.12)}
+.brand h1{font-size:19px;margin:0}.brand small{display:block;opacity:.75;margin-top:3px}
+.nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#eafff0;text-align:left;padding:12px 13px;border-radius:12px}
+.nav button:hover,.nav button.active{background:rgba(255,255,255,.13)}
+.sidebar-footer{position:absolute;left:16px;right:16px;bottom:20px;font-size:12px;opacity:.78}
+.main{padding:24px}.topbar{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:22px}
+.topbar h2{margin:0;font-size:28px}.user-chip{background:white;border:1px solid #d6e8dc;border-radius:999px;padding:9px 13px;box-shadow:0 8px 22px rgba(10,60,30,.08)}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1.2fr .8fr}
+.card{background:white;border:1px solid #dcebe1;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.metric .value{font-size:31px;font-weight:800;color:var(--green-800);margin-top:6px}.metric .label{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(135deg,var(--green-900),var(--green-600));color:white;overflow:hidden;position:relative}
+.hero:after{content:"♻";position:absolute;font-size:160px;opacity:.09;right:-14px;bottom:-50px}
+.hero h3{font-size:28px;margin:0 0 8px}.hero p{max-width:650px;opacity:.9;line-height:1.5}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.quick button{border:0;background:#f4fbf6;border-radius:16px;padding:16px;text-align:left;color:var(--ink);box-shadow:inset 0 0 0 1px #dcefe2}
+.quick b{display:block;margin-top:7px}.quick span{font-size:24px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}.section-title h3{margin:0}
+.list{display:grid;gap:10px}.item{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #e1ece5;padding:13px;border-radius:14px}
+.badge{padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}.open{background:#ffe7e7;color:#a22}.done{background:#ddf6e5;color:#18733e}.progress{background:#fff0cc;color:#9b6200}.pending{background:#eef1f4;color:#50606d}
+.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:700}.primary{background:var(--green-700);color:white}.ghost{background:#eef7f1;color:var(--green-900)}.danger{background:#fee8e8;color:#a82323}
+.form{display:grid;gap:12px}.form label{font-size:13px;font-weight:700}.form input,.form select,.form textarea{width:100%;border:1px solid #ccdfd2;border-radius:12px;padding:12px;background:#fbfdfb}.form textarea{min-height:95px;resize:vertical}
+.map{min-height:330px;border-radius:18px;position:relative;overflow:hidden;background:
+radial-gradient(circle at 28% 40%,rgba(34,164,90,.25) 0 7%,transparent 8%),
+radial-gradient(circle at 66% 28%,rgba(213,61,61,.24) 0 6%,transparent 7%),
+radial-gradient(circle at 72% 68%,rgba(213,61,61,.22) 0 8%,transparent 9%),
+linear-gradient(20deg,#e4f0e7,#f8fbf9)}
+.map:before{content:"";position:absolute;inset:0;background-image:linear-gradient(90deg,transparent 49%,rgba(41,89,58,.12) 50%,transparent 51%),linear-gradient(0deg,transparent 49%,rgba(41,89,58,.10) 50%,transparent 51%);background-size:70px 70px}
+.pin{position:absolute;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;color:white;font-size:13px;box-shadow:0 8px 18px rgba(0,0,0,.22)}
+.pin span{transform:rotate(45deg)}.pin.green{background:var(--green-700)}.pin.red{background:var(--danger)}
+.toast{position:fixed;right:20px;bottom:20px;background:#123c29;color:white;padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);display:none;z-index:20}
+.view{display:none}.view.active{display:block}
+.login-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:
+radial-gradient(circle at 20% 10%,rgba(57,184,107,.28),transparent 30%),
+linear-gradient(145deg,#eaf9ef,#d6efdf 55%,#f8fcf9)}
+.login-card{width:min(920px,100%);display:grid;grid-template-columns:1fr 1fr;background:white;border-radius:28px;overflow:hidden;box-shadow:0 28px 80px rgba(8,67,36,.2)}
+.login-art{background:linear-gradient(150deg,var(--green-950),var(--green-600));color:white;padding:42px;position:relative;min-height:560px}
+.login-art .big{font-size:58px;font-weight:900;line-height:.95;margin-top:75px}.login-art p{line-height:1.55;max-width:360px;opacity:.9}
+.login-art:after{content:"🌿";position:absolute;right:22px;bottom:20px;font-size:150px;opacity:.22}
+.login-form{padding:42px;display:flex;flex-direction:column;justify-content:center}.login-form h2{font-size:30px;margin:0 0 6px}.login-form p{color:var(--muted);margin-top:0}
+.demo{font-size:12px;color:var(--muted);margin-top:12px;padding:10px;background:#f3f8f4;border-radius:10px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #e6eee8;font-size:14px}.table th{color:var(--muted)}
+.mobilebar{display:none}
+@media(max-width:900px){
+ .app-shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px 16px 90px}.g4{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}.quick{grid-template-columns:repeat(2,1fr)}
+ .mobilebar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #dce8df;z-index:10}
+ .mobilebar button{border:0;background:white;padding:11px 5px;color:#496458;font-size:11px}.mobilebar button span{display:block;font-size:20px}
+ .login-card{grid-template-columns:1fr}.login-art{display:none}.login-form{padding:28px;min-height:520px}
+}
+@media(max-width:560px){.g4{grid-template-columns:1fr 1fr}.quick{grid-template-columns:1fr 1fr}.topbar h2{font-size:23px}.main{padding-top:14px}}
+</style>
 </head>
 <body>
 <div id="login" class="login-screen">
@@ -128,6 +191,52 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script src="script.js"></script>
+<script>
+const defaultOccurrences=[
+ {id:1,date:'24/08/2026',local:'Centro',type:'Entulho',kg:120,priority:'Alta',status:'Em aberto',desc:'Acúmulo próximo à via principal'},
+ {id:2,date:'23/08/2026',local:'Região Norte',type:'Plástico',kg:45,priority:'Média',status:'Em andamento',desc:'Materiais recicláveis'},
+ {id:3,date:'21/08/2026',local:'Comunidade Rural 08',type:'Orgânico',kg:60,priority:'Baixa',status:'Concluído',desc:'Coleta finalizada'}
+];
+let occurrences=JSON.parse(localStorage.getItem('lixoZeroOccurrences')||'null')||defaultOccurrences;
+let schedules=JSON.parse(localStorage.getItem('lixoZeroSchedules')||'[]');
+let currentRole='cidadao';
+
+function persist(){localStorage.setItem('lixoZeroOccurrences',JSON.stringify(occurrences));localStorage.setItem('lixoZeroSchedules',JSON.stringify(schedules))}
+function login(){currentRole=document.getElementById('role').value;document.getElementById('login').style.display='none';document.getElementById('app').style.display='grid';document.getElementById('mobilebar').style.display=window.innerWidth<=900?'grid':'none';document.getElementById('userChip').textContent=currentRole==='admin'?'Administrador / Gestor':'Cidadão';document.querySelector('[data-view="admin"]').style.display=currentRole==='admin'?'block':'none';renderAll()}
+function quickRegister(){toast('Cadastro demonstrativo criado. Agora você pode entrar.')}
+function openView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const titles={dashboard:'Painel',ocorrencia:'Registrar ocorrência',agendamento:'Agendar coleta',mapa:'Localidades',historico:'Histórico',relatorios:'Relatórios',admin:'Administração'};document.getElementById('pageTitle').textContent=titles[id]||'Lixo Zero MB';renderAll()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>openView(b.dataset.view));
+function toast(msg){let el=document.getElementById('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2200)}
+function statusClass(s){return s==='Concluído'?'done':s==='Em andamento'?'progress':s==='Em aberto'?'open':'pending'}
+function saveOccurrence(){
+ const loc=oLocal.value.trim(),kg=Number(oKg.value||0),desc=oDesc.value.trim();
+ if(!loc||!oTipo.value){toast('Preencha os campos obrigatórios');return}
+ occurrences.unshift({id:Date.now(),date:new Date().toLocaleDateString('pt-BR'),local:loc,type:oTipo.value,kg,priority:oPrior.value,status:'Em aberto',desc,gps:oGps.value.trim()});
+ persist();oLocal.value=oKg.value=oDesc.value=oGps.value='';toast('Ocorrência registrada com sucesso');renderAll();openView('dashboard')
+}
+function saveSchedule(){
+ if(!aLocal.value.trim()||!aData.value){toast('Informe endereço e data');return}
+ schedules.unshift({id:Date.now(),type:aTipo.value,kg:Number(aQtd.value||0),local:aLocal.value.trim(),date:aData.value,status:'Pendente'});
+ localStorage.setItem('lixoZeroSchedules',JSON.stringify(schedules));toast('Agendamento realizado');aQtd.value=aLocal.value=aData.value='';openView('dashboard')
+}
+function cycleStatus(id){
+ const o=occurrences.find(x=>x.id===id);if(!o)return;
+ const flow=['Em aberto','Em andamento','Concluído'];o.status=flow[(flow.indexOf(o.status)+1)%flow.length];persist();renderAll();toast('Status atualizado')
+}
+function renderAll(){
+ const open=occurrences.filter(x=>x.status==='Em aberto').length,prog=occurrences.filter(x=>x.status==='Em andamento').length,done=occurrences.filter(x=>x.status==='Concluído').length,kg=occurrences.reduce((a,b)=>a+Number(b.kg||0),0);
+ mOpen.textContent=open;mProg.textContent=prog;mDone.textContent=done;mKg.textContent=kg.toLocaleString('pt-BR');
+ recentList.innerHTML=occurrences.slice(0,5).map(o=>`<div class="item"><div><b>${o.local}</b><div class="source">${o.date} • ${o.type}</div></div><span class="badge ${statusClass(o.status)}">${o.status}</span></div>`).join('');
+ historyBody.innerHTML=occurrences.map(o=>`<tr><td>${o.date}</td><td>${o.local}</td><td>${o.type}</td><td>${o.kg||0} kg</td><td><span class="badge ${statusClass(o.status)}">${o.status}</span></td></tr>`).join('');
+ rTotal.textContent=occurrences.length;rDone.textContent=done;rRate.textContent=(occurrences.length?Math.round(done/occurrences.length*100):0)+'%';rKg.textContent=kg;
+ const types={};occurrences.forEach(o=>types[o.type]=(types[o.type]||0)+Number(o.kg||0));typeReport.innerHTML=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(([t,v])=>`<div class="item"><b>${t}</b><span>${v} kg</span></div>`).join('')||'<div class="source">Sem dados.</div>';
+ adminList.innerHTML=occurrences.map(o=>`<div class="item"><div><b>${o.local}</b><div class="source">${o.type} • ${o.kg||0} kg</div></div><div><span class="badge ${statusClass(o.status)}">${o.status}</span> <button class="btn ghost" onclick="cycleStatus(${o.id})">Avançar status</button></div></div>`).join('');
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify({occurrences,schedules},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='lixo-zero-mb-dados.json';a.click();URL.revokeObjectURL(url)
+}
+window.addEventListener('resize',()=>{if(document.getElementById('app').style.display!=='none')document.getElementById('mobilebar').style.display=window.innerWidth<=900?'grid':'none'});
+renderAll();
+</script>
 </body>
 </html>
